@@ -47,6 +47,7 @@ export const store = mutation({
       name: identity.name ?? "Anonymous",
       imageUrl: identity.pictureUrl,
       hasCompletedOnboarding: false,
+      isPro: false,
       freeEventsCreated: 0,
       createdAt: Date.now(),
       updatedAt: Date.now(),
@@ -101,3 +102,46 @@ export const completeOnboarding = mutation({
     return user._id;
   },
 });
+
+// Upgrade user to Pro (demo toggle)
+export const upgradeToPro = mutation({
+  args: {},
+  handler: async (ctx) => {
+    const identity = await ctx.auth.getUserIdentity();
+    if (!identity) throw new Error("Not authenticated");
+
+    const user = await ctx.db
+      .query("users")
+      .withIndex("by_token", (q) =>
+        q.eq("tokenIdentifier", identity.tokenIdentifier)
+      )
+      .unique();
+
+    if (!user) throw new Error("User not found");
+
+    await ctx.db.patch(user._id, { isPro: true, updatedAt: Date.now() });
+    return { success: true };
+  },
+});
+
+// Downgrade user from Pro (demo toggle)
+export const downgradeFromPro = mutation({
+  args: {},
+  handler: async (ctx) => {
+    const identity = await ctx.auth.getUserIdentity();
+    if (!identity) throw new Error("Not authenticated");
+
+    const user = await ctx.db
+      .query("users")
+      .withIndex("by_token", (q) =>
+        q.eq("tokenIdentifier", identity.tokenIdentifier)
+      )
+      .unique();
+
+    if (!user) throw new Error("User not found");
+
+    await ctx.db.patch(user._id, { isPro: false, updatedAt: Date.now() });
+    return { success: true };
+  },
+});
+

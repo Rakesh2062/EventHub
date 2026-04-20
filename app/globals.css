@@ -118,7 +118,27 @@
   }
 
   body {
-    @apply bg-background text-foreground;
+    @apply bg-background text-foreground transition-colors duration-300;
+  }
+
+  /* Dark mode: rich gradient background */
+  .dark body {
+    background-image: linear-gradient(
+      to bottom right,
+      oklch(0.12 0 0),
+      oklch(0.15 0 0),
+      oklch(0.13 0 0)
+    );
+  }
+
+  /* Light mode: soft warm background */
+  :root:not(.dark) body {
+    background-image: linear-gradient(
+      to bottom right,
+      oklch(0.97 0.005 240),
+      oklch(1 0 0),
+      oklch(0.96 0.005 300)
+    );
   }
 }
 

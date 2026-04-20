@@ -12,7 +12,7 @@ import { CalendarIcon, Loader2, Sparkles } from "lucide-react";
 import { useConvexMutation, useConvexQuery } from "@/hooks/use-convex-query";
 import { api } from "@/convex/_generated/api";
 import { toast } from "sonner";
-import { useAuth } from "@clerk/nextjs";
+import { usePro } from "@/hooks/use-pro";
 
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -68,9 +68,8 @@ export default function CreateEventPage() {
   const [showUpgradeModal, setShowUpgradeModal] = useState(false);
   const [upgradeReason, setUpgradeReason] = useState("limit"); // "limit" or "color"
 
-  // Check if user has Pro plan
-  const { has } = useAuth();
-  const hasPro = has?.({ plan: "pro" });
+  // Check if user has Pro plan (reads from Convex DB)
+  const { hasPro } = usePro();
 
   const { data: currentUser } = useConvexQuery(api.users.getCurrentUser);
   const { mutate: createEvent, isLoading } = useConvexMutation(
@@ -201,6 +200,34 @@ export default function CreateEventPage() {
     setValue("category", generatedData.category);
     setValue("capacity", generatedData.suggestedCapacity);
     setValue("ticketType", generatedData.suggestedTicketType);
+
+    if (generatedData.locationType) {
+      setValue("locationType", generatedData.locationType);
+    }
+
+    if (generatedData.state) {
+      setValue("state", generatedData.state);
+      // Give react-hook-form a moment to register the state before setting the city to ensure city choices are rendered
+      if (generatedData.city) {
+        setTimeout(() => setValue("city", generatedData.city), 100);
+      }
+    }
+
+    if (generatedData.startDate) {
+      const [y, m, d] = generatedData.startDate.split("-");
+      const localDate = new Date(y, m - 1, d);
+      setValue("startDate", localDate);
+      setValue("endDate", localDate);
+    }
+
+    if (generatedData.startTime) {
+      setValue("startTime", generatedData.startTime);
+    }
+
+    if (generatedData.endTime) {
+      setValue("endTime", generatedData.endTime);
+    }
+
     toast.success("Event details filled! Customize as needed.");
   };
 

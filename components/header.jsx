@@ -2,8 +2,8 @@
 
 import React, { useState } from "react";
 import Link from "next/link";
-import { Building, Crown, Plus, Sparkles, Ticket } from "lucide-react";
-import { SignInButton, useAuth, UserButton, useUser } from "@clerk/nextjs";
+import { Building, Crown, Plus, Ticket } from "lucide-react";
+import { SignInButton, UserButton } from "@clerk/nextjs";
 import { Authenticated, Unauthenticated } from "convex/react";
 import { BarLoader } from "react-spinners";
 import { useStoreUser } from "@/hooks/use-store-user";
@@ -14,6 +14,8 @@ import { Button } from "@/components/ui/button";
 import Image from "next/image";
 import UpgradeModal from "./upgrade-modal";
 import { Badge } from "./ui/badge";
+import { ThemeToggle } from "./theme-toggle";
+import { usePro } from "@/hooks/use-pro";
 
 export default function Header() {
   const [showUpgradeModal, setShowUpgradeModal] = useState(false);
@@ -22,8 +24,7 @@ export default function Header() {
   const { showOnboarding, handleOnboardingComplete, handleOnboardingSkip } =
     useOnboarding();
 
-  const { has } = useAuth();
-  const hasPro = has?.({ plan: "pro" });
+  const { hasPro } = usePro();
 
   return (
     <>
@@ -69,6 +70,9 @@ export default function Header() {
             <Button variant="ghost" size="sm" asChild className={"mr-2"}>
               <Link href="/explore">Explore</Link>
             </Button>
+
+            {/* Theme Toggle */}
+            <ThemeToggle />
 
             <Authenticated>
               {/* Create Event Button */}

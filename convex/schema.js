@@ -23,7 +23,8 @@ export default defineSchema({
     ),
     interests: v.optional(v.array(v.string())), // Min 3 categories
 
-    // Organizer tracking (User Subscription)
+    // Subscription
+    isPro: v.optional(v.boolean()), // Pro plan flag (demo toggle)
     freeEventsCreated: v.number(), // Track free event limit (1 free)
 
     // Timestamps

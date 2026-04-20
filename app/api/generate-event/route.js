@@ -26,7 +26,13 @@ Return this exact JSON structure:
   "description": "Detailed event description in a single paragraph. Use spaces instead of line breaks. Make it 2-3 sentences describing what attendees will learn and experience.",
   "category": "One of: tech, music, sports, art, food, business, health, education, gaming, networking, outdoor, community",
   "suggestedCapacity": 50,
-  "suggestedTicketType": "free"
+  "suggestedTicketType": "free",
+  "locationType": "physical",
+  "state": "Andhra Pradesh",
+  "city": "Vijayawada",
+  "startDate": "2026-06-20",
+  "startTime": "10:00",
+  "endTime": "18:00"
 }
 
 User's event idea: ${prompt}
@@ -38,6 +44,11 @@ Rules:
 - Make title catchy and under 80 characters
 - Description should be 2-3 sentences, informative, single paragraph
 - suggestedTicketType should be either "free" or "paid"
+- locationType should be either "physical" or "online"
+- For state, use the full name of an Indian state (e.g. Karnataka, Maharashtra, Delhi) if physical. Leave empty if online.
+- For city, use a relevant city name in that state if physical. Leave empty if online.
+- For startDate, generate a suitable future date in YYYY-MM-DD format (Current Year: 2026).
+- For startTime and endTime, generate realistic event times in 24h HH:MM format (e.g. 10:00 and 17:00).
 `;
 
     const result = await model.generateContent(systemPrompt);
