@@ -5,6 +5,7 @@ import Footer from "@/components/footer";
 import { ConvexClientProvider } from "@/components/convex-client-provider";
 import { ClerkThemeProvider } from "@/components/clerk-theme-provider";
 import { Toaster } from "sonner";
+import { Analytics } from "@vercel/analytics/next"
 
 export const metadata = {
   title: "EventHub - Delightful Events Start Here",
