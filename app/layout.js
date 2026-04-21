@@ -41,6 +41,7 @@ export default function RootLayout({ children }) {
             </ConvexClientProvider>
           </ClerkThemeProvider>
         </ThemeProvider>
+        <Analytics />
       </body>
     </html>
   );
